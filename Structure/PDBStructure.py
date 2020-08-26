@@ -198,6 +198,19 @@ def main(inputPdb, workingFolder = "/data/"):
             
                 if mesh_atoms is None: continue
                 
+                lines = []
+                for i, mesh_atom in mesh_atoms.iterrows():
+                    fieldsSelected = [res, mesh_atom.x_coord,mesh_atom.y_coord,mesh_atom.z_coord, mesh_atom.element_symbol]
+                    lines.append( "\t".join( [str(x) for x in fieldsSelected] ) )
+                FileHandler.appendLines(workingFolder+"NN_digestion/%s_%s_atoms.tsv" % (inputPdb,chain), lines)
+                
+                lines = []
+                for i, mesh_atom in mesh_waters.iterrows():
+                    fieldsSelected = [res, mesh_atom.x_coord,mesh_atom.y_coord,mesh_atom.z_coord]
+                    lines.append( "\t".join( [str(x) for x in fieldsSelected] ) )
+                FileHandler.appendLines(workingFolder+"NN_digestion/%s_%s_waters.tsv" % (inputPdb,chain), lines)
+                
+                '''
                 for i, mesh_atom in mesh_atoms.iterrows():
                     d = dict()
                     d["record"] = inputPdb+"_"+chain+"_"+str(res)
@@ -209,6 +222,7 @@ def main(inputPdb, workingFolder = "/data/"):
                     d["record"] = inputPdb+"_"+chain+"_"+str(res)
                     d["%s_%s_%s" % (mesh_atom.x_coord,mesh_atom.y_coord,mesh_atom.z_coord)] = 1
                     df_waters = df_waters.append(d, ignore_index=True)
+                '''
                 
                 # To print
                 #ppdb = PandasPdb()
@@ -219,8 +233,8 @@ def main(inputPdb, workingFolder = "/data/"):
             except:
                 continue
         
-        df_atoms.to_csv(workingFolder+"NN_digestion/%s_%s_atoms.df" % (inputPdb,chain), sep="\t")
-        df_waters.to_csv(workingFolder+"NN_digestion/%s_%s_waters.df" % (inputPdb,chain), sep="\t")
+        #df_atoms.to_csv(workingFolder+"NN_digestion/%s_%s_atoms.df" % (inputPdb,chain), sep="\t")
+        #df_waters.to_csv(workingFolder+"NN_digestion/%s_%s_waters.df" % (inputPdb,chain), sep="\t")
 
     
 if __name__ == '__main__':
