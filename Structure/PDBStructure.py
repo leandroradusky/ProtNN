@@ -125,7 +125,7 @@ class PDBStructure( object ):
         
         # Selection waters, the NN features
         distances = squareform(pdist(self.hetatms.append(CA)[['x_coord', 'y_coord', 'z_coord']]))
-        closeHetatoms = (distances[ -1 ] < radius) & (distances[ -1 ] > 3)
+        closeHetatoms = (distances[ -1 ] < radius)
         try:
             closeHetatoms = self.hetatms.iloc[ closeHetatoms.T ]
         except:
@@ -140,7 +140,7 @@ class PDBStructure( object ):
 
         # Selection of atoms, the NN features
         distances = squareform(pdist(self.atoms[['x_coord', 'y_coord', 'z_coord']]))
-        closeAtoms = (distances[ CA.index ] < radius) & (distances[ CA.index ] > 3)
+        closeAtoms = (distances[ CA.index ] < radius)
         closeAtoms = self.atoms.iloc[ closeAtoms.T ]
         
         # For further transform atoms to N-CA-C plane
@@ -197,6 +197,8 @@ def main(inputPdb, workingFolder = "/data/"):
                 mesh_atoms, mesh_waters=  pdbo.getResidueMesh( chain, res ) 
             
                 if mesh_atoms is None: continue
+                
+                print( mesh_atoms.columns )
                 
                 lines = []
                 for i, mesh_atom in mesh_atoms.iterrows():
